@@ -1,7 +1,7 @@
 const arg = require('minimist')(process.argv.slice(2))
 const today = new Date()
 let year = today.getFullYear()
-let month = today.getMonth()
+let month = today.getMonth() + 1
 if (arg.y && arg.m) {
   [year, month] = [arg.y, arg.m]
 } else if (arg.y) {
