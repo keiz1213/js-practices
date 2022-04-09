@@ -10,22 +10,22 @@ const reader = require('readline').createInterface({
   output: process.stdout
 })
 
-console.log('----メモを記入してください----')
+console.log('----Please write a memo----')
 
 reader.on('line', (line) => {
   lines.push(line)
 })
 
 reader.on('close', () => {
-  console.log('----メモを保存しました----')
+  console.log('----Saved the memo----')
   lines.forEach((line) => {
     console.log(line)
   })
 
   db.serialize(() => {
-    db.run('CREATE TABLE IF NOT EXISTS memos(first_line TEXT, all_line TEXT)')
+    db.run('CREATE TABLE IF NOT EXISTS memos(id INTEGER PRIMARY KEY AUTOINCREMENT, first_line TEXT, all_line TEXT)')
 
-    const stmt = db.prepare('INSERT INTO memos VALUES(?,?)')
+    const stmt = db.prepare('INSERT INTO memos VALUES(NULL,?,?)')
     stmt.run([lines[0], lines.join('\n')])
     stmt.finalize()
   })

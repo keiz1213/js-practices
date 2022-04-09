@@ -18,27 +18,11 @@ function getAllMemos () {
     })
 }
 
-function getIndex (firstLines, answer) {
-  for (const line of firstLines) {
-    if (line.value === answer) {
-      return firstLines.indexOf(line)
-    }
-  }
-}
-
 getAllMemos().then(
   function () {
     const firstLines = allmemos.map(memo => memo.first_line)
-    const allLines = allmemos.map(memo => memo.all_line)
-    const { Select } = require('enquirer')
-
-    const prompt = new Select({
-      name: 'memo',
-      message: 'Please select the memo you want to see',
-      choices: firstLines
+    firstLines.forEach(firstline => {
+      console.log(firstline)
     })
-    prompt.run()
-      .then(answer => console.log(allLines[getIndex(firstLines, answer)]))
-      .catch(console.error)
   }
 )
