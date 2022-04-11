@@ -30,6 +30,9 @@ class Controller {
     self.db.all().then(
       function (allmemos) {
         const firstLines = allmemos.map(memo => memo.first_line)
+        if (firstLines.length === 0) {
+          return console.log('There is no memo yet')
+        }
         firstLines.forEach(firstline => {
           console.log(firstline)
         })
@@ -43,6 +46,9 @@ class Controller {
     self.db.all().then(
       function (allmemos) {
         const firstLines = allmemos.map(memo => memo.first_line)
+        if (firstLines.length === 0) {
+          return console.log('There is no memo yet')
+        }
         const allLines = allmemos.map(memo => memo.all_line)
         const { Select } = require('enquirer')
 
@@ -64,6 +70,9 @@ class Controller {
     self.db.all().then(
       function (allmemos) {
         const firstLines = allmemos.map(memo => memo.first_line)
+        if (firstLines.length === 0) {
+          return console.log('There is no memo yet')
+        }
         const { Select } = require('enquirer')
 
         const prompt = new Select({
