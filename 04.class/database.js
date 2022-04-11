@@ -4,14 +4,30 @@ class Database {
     this.db = new sqlite.Database('memos.sqlite')
   }
 
-  save (lines) {
-    this.db.serialize(() => {
-      this.db.run('CREATE TABLE IF NOT EXISTS memos(id INTEGER PRIMARY KEY AUTOINCREMENT, first_line TEXT, all_line TEXT)')
-
-      const stmt = this.db.prepare('INSERT INTO memos VALUES(NULL,?,?)')
-      stmt.run([lines[0], lines.join('\n')])
-      stmt.finalize()
+  createTable () {
+    this.db.run('CREATE TABLE IF NOT EXISTS memos(id INTEGER PRIMARY KEY AUTOINCREMENT, first_line TEXT, all_line TEXT)', (err) => {
+      if (err) {
+        return console.error(err.message)
+      }
     })
+  }
+
+  save (lines) {
+    const self = this
+    return new Promise(
+      function (resolve) {
+        self.db.serialize(() => {
+          const stmt = self.db.prepare('INSERT INTO memos VALUES(NULL,?,?)', (err) => {
+            if (err) {
+              return console.error(err.message)
+            }
+          })
+          stmt.run([lines[0], lines.join('\n')])
+          stmt.finalize()
+          resolve()
+        })
+      }
+    )
   }
 
   delete (id) {

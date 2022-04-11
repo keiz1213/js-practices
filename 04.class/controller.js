@@ -4,6 +4,7 @@ class Controller {
   constructor (argv) {
     this.argv = argv
     this.db = new Database()
+    this.db.createTable()
   }
 
   createMemo () {
@@ -11,17 +12,21 @@ class Controller {
     console.log('----Please write a memo----')
     const reader = this.createReader()
     const lines = []
+
     reader.on('line', (line) => {
       lines.push(line)
     })
 
     reader.on('close', () => {
-      self.db.save(lines)
-      console.log('----Saved the memo----')
-      lines.forEach((line) => {
-        console.log(line)
-      })
-      self.db.closeDb()
+      self.db.save(lines).then(
+        function () {
+          console.log('----Saved the memo----')
+          lines.forEach((line) => {
+            console.log(line)
+          })
+          self.db.closeDb()
+        }
+      )
     })
   }
 
