@@ -8,14 +8,8 @@ class Controller {
 
   createMemo () {
     const self = this
-    process.stdin.resume()
-    process.stdin.setEncoding('utf8')
-
-    const reader = require('readline').createInterface({
-      input: process.stdin
-    })
     console.log('----Please write a memo----')
-
+    const reader = this.createReader()
     const lines = []
     reader.on('line', (line) => {
       lines.push(line)
@@ -89,6 +83,15 @@ class Controller {
           .catch(console.error)
       }
     )
+  }
+
+  createReader () {
+    process.stdin.resume()
+    process.stdin.setEncoding('utf8')
+
+    return require('readline').createInterface({
+      input: process.stdin
+    })
   }
 
   getIndex (firstLines, answer) {
