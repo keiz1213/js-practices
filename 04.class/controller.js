@@ -21,9 +21,6 @@ class Controller {
       self.db.save(lines).then(
         function () {
           console.log('----Saved the memo----')
-          lines.forEach((line) => {
-            console.log(line)
-          })
           self.db.closeDb()
         }
       )
@@ -55,13 +52,7 @@ class Controller {
           return console.log('There is no memo yet')
         }
         const allLines = allmemos.map(memo => memo.all_line)
-        const { Select } = require('enquirer')
-
-        const prompt = new Select({
-          name: 'memo',
-          message: 'Please select the memo you want to see',
-          choices: firstLines
-        })
+        const prompt = self.createPrompt(firstLines, 'Please select the memo you want to see')
         prompt.run()
           .then(answer => {
             console.log(allLines[self.getIndex(firstLines, answer)])
@@ -78,13 +69,7 @@ class Controller {
         if (firstLines.length === 0) {
           return console.log('There is no memo yet')
         }
-        const { Select } = require('enquirer')
-
-        const prompt = new Select({
-          name: 'memo',
-          message: 'Please select the memo you want to delete',
-          choices: firstLines
-        })
+        const prompt = self.createPrompt(firstLines, 'Please select the memo you want to delete')
         prompt.run()
           .then(answer => {
             const id = allmemos[self.getIndex(firstLines, answer)].id
@@ -99,6 +84,8 @@ class Controller {
     )
   }
 
+  // private----------------------------------------------------------------------------------
+
   createReader () {
     process.stdin.resume()
     process.stdin.setEncoding('utf8')
@@ -106,6 +93,17 @@ class Controller {
     return require('readline').createInterface({
       input: process.stdin
     })
+  }
+
+  createPrompt (firstLines, message) {
+    const { Select } = require('enquirer')
+
+    const prompt = new Select({
+      name: 'memo',
+      message: message,
+      choices: firstLines
+    })
+    return prompt
   }
 
   getIndex (firstLines, answer) {
