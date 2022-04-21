@@ -1,12 +1,9 @@
-const Controller = require('./controller')
-
 class Command {
   constructor (option) {
     this.option = option
   }
 
-  run () {
-    const controller = new Controller()
+  run (controller) {
     if (this.option === '-l') {
       controller.listMemo()
     } else if (this.option === '-r') {
