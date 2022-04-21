@@ -70,6 +70,7 @@ class Controller {
       const id = allmemos.find(memo => memo.first_line === answer).id
       await this.db.delete(id)
       console.log(`'${answer}' has been deleted`)
+      this.db.closeDb()
     } catch (e) {
       console.error(e.message)
     }
