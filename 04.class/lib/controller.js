@@ -26,11 +26,8 @@ class Controller {
 
   async listMemo () {
     try {
-      const allmemos = await this.db.all()
-      if (allmemos.length === 0) {
-        return console.log('There is no memo yet')
-      }
-      const firstLines = allmemos.map(memo => memo.first_line)
+      const allmemos = await this.getAllMemos(this.db)
+      const firstLines = this.makeFirstLines(allmemos)
       firstLines.forEach(firstLine => {
         console.log(firstLine)
       })
@@ -42,11 +39,8 @@ class Controller {
 
   async showMemo () {
     try {
-      const allmemos = await this.db.all()
-      if (allmemos.length === 0) {
-        return console.log('There is no memo yet')
-      }
-      const firstLines = allmemos.map(memo => memo.first_line)
+      const allmemos = await this.getAllMemos(this.db)
+      const firstLines = this.makeFirstLines(allmemos)
       const prompt = this.createPrompt(firstLines, 'Please select the memo you want to see')
       const answer = await prompt.run()
       console.log(allmemos.find(memo => memo.first_line === answer).all_line)
@@ -58,11 +52,8 @@ class Controller {
 
   async deleteMemo () {
     try {
-      const allmemos = await this.db.all()
-      if (allmemos.length === 0) {
-        return console.log('There is no memo yet')
-      }
-      const firstLines = allmemos.map(memo => memo.first_line)
+      const allmemos = await this.getAllMemos(this.db)
+      const firstLines = this.makeFirstLines(allmemos)
       const prompt = this.createPrompt(firstLines, 'Please select the memo you want to delete')
       const answer = await prompt.run()
       const id = allmemos.find(memo => memo.first_line === answer).id
@@ -92,6 +83,18 @@ class Controller {
       choices: firstLines
     })
     return prompt
+  }
+
+  async getAllMemos (db) {
+    const allmemos = await db.all()
+    if (allmemos.length === 0) {
+      throw new Error('There is no memo yet')
+    }
+    return allmemos
+  }
+
+  makeFirstLines (allmemos) {
+    return allmemos.map(memo => memo.first_line)
   }
 }
 
