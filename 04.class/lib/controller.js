@@ -1,8 +1,6 @@
-const Database = require('./database')
-
 class Controller {
-  constructor () {
-    this.db = new Database()
+  constructor (database) {
+    this.db = database
     this.db.createTable()
   }
 
